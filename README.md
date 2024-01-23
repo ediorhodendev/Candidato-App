@@ -1,27 +1,37 @@
-# CandidatoApp
+# Frontend do Projeto CRUD de Candidatos
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.11.
+Este é o frontend do projeto de exemplo que demonstra como criar uma aplicação de CRUD de candidatos usando Angular 13 e .NET 6. A interface do usuário foi desenvolvida com a biblioteca Po-UI, que oferece componentes e recursos prontos para uso.
 
-## Development server
+## Funcionalidades
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+A Solution consiste nos seguintes projetos:
 
-## Code scaffolding
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-## Build
+## Funcionalidades
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+- Cadastro de um novo candidato.
+- Atualização de um candidato existente.
+- Exclusão de um candidato.
+- Listagem de todos os candidatos.
+- Validação de CPF e email.
+- Mensagens de erro detalhadas para validações de campos.
 
-## Running unit tests
+## Requisitos
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+-Angular 16 ou superior.
+-Node.js e npm instalados.
+-Angular CLI (Command Line Interface) instalado globalmente.
+-Acesso à API .NET do projeto de backend (certifique-se de que a API está em execução).
 
-## Running end-to-end tests
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+## Configuração
 
-## Further help
+Para configurar e executar o frontend do projeto, siga estas etapas:
+Clone o repositório 
+Abra o a pasta no vs
+Npm Install
+Ng serve
+Abra seu navegador e acesse http://localhost:4200.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Agora, você tem o frontend do projeto de CRUD de candidatos em execução localmente. Você pode interagir com a aplicação, cadastrar candidatos, atualizar informações e realizar operações de CRUD. Certifique-se de que o backend também esteja em execução para que o frontend possa se comunicar com a API.
