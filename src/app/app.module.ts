@@ -8,7 +8,7 @@ import { PoTemplatesModule } from '@po-ui/ng-templates';
 
 import { AppComponent } from './app.component';
 import { CandidatoListagemComponent } from './candidato-listagem/candidato-listagem.component';
-import { CandidatoModalComponent } from './candidato-modal/candidato-modal.component';
+
 import { AppRoutingModule } from './app-routing.module'; // Importe o AppRoutingModule
 import { PoModalModule } from '@po-ui/ng-components';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -21,7 +21,7 @@ import { HomeComponent } from './home/home.component';
   declarations: [
     AppComponent,
     CandidatoListagemComponent,
-    CandidatoModalComponent,
+    
     CadastroCandidatoPoComponent,
     HomeComponent
     
