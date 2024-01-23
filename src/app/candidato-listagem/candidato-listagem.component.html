@@ -1,0 +1,49 @@
+<div class="container">
+  <h2>Listagem de Candidatos</h2>
+
+  <po-input
+    class="mb-3"
+    [(ngModel)]="nomePesquisa"
+    (ngModelChange)="pesquisarCandidatos()"
+    p-placeholder="Pesquisar por nome"
+  ></po-input>
+
+  <po-table
+    [p-literals]="literals"
+    [p-columns]="columns"
+    [p-items]="candidatosFiltrados"
+  >
+
+    <ng-template p-table-row-template let-candidato>
+      <td>{{ candidato.id }}</td>
+      <td>{{ candidato.nome }}</td>
+      <td>{{ candidato.email }}</td>
+      <td>{{ candidato.cpf }}</td>
+      <td>
+        <div class="d-flex align-items-center">
+          <po-button
+            p-label="Editar"
+            p-icon="po-icon-edit"
+            p-size="sm"
+            (click)="abrirModalEdicao(candidato)"
+          ></po-button>
+          <po-button
+            p-label="Excluir"
+            p-icon="po-icon-delete"
+            p-size="sm"
+            p-style="danger"
+            (click)="deletarCandidato(candidato)"
+          ></po-button>
+        </div>
+      </td>
+    </ng-template>
+  </po-table>
+
+  <po-button
+    p-label="Novo Candidato"
+    p-size="sm"
+    (click)="abrirModalCriacao()"
+  ></po-button>
+
+ 
+</div>
