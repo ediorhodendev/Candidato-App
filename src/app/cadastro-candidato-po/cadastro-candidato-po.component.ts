@@ -41,27 +41,21 @@ export class CadastroCandidatoPoComponent implements OnInit {
   }
 
   salvarCandidato() {
-    if (this.form.valid) {
-      // Se o formulário for válido
-      if (this.isNovoCandidato === true) {
-        this.candidatoService.criarCandidato(this.candidato).subscribe(() => {
-          this.poNotification.success('Candidato cadastrado com sucesso.');
-          this.router.navigate(['/candidatos']);
-        });
-      } else {
-        this.candidatoService.atualizarCandidato(this.candidato).subscribe(() => {
-          this.poNotification.success('Candidato salvo com sucesso.');
-          this.router.navigate(['/candidatos']);
-        });
-      }
+    if (this.isNovoCandidato === true) {
+      this.candidatoService.criarCandidato(this.candidato).subscribe(() => {
+        this.poNotification.success('Candidato cadastrado com sucesso.');
+        this.router.navigate(['/candidatos']);
+      });
     } else {
-      // Se o formulário for inválido ou campos de e-mail e CPF forem preenchidos incorretamente
-      this.poNotification.error('Verifique os campos do formulário.');
+      this.candidatoService.atualizarCandidato(this.candidato).subscribe(() => {
+        this.poNotification.success('Candidato salvo com sucesso.');
+        this.router.navigate(['/candidatos']);
+      });
     }
   }
+  
 
   cancelar() {
     this.router.navigate(['/candidatos']);
   }
 }
-

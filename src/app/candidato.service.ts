@@ -56,7 +56,14 @@ export class CandidatoService {
       })
     );
   }
-
+  verificarCpfExistente(cpf: string): Observable<boolean> {
+    return this.http.get<boolean>(`${this.apiUrl}verificacpfexiste?cpf=${cpf}`).pipe(
+      catchError((error: any) => {
+        console.error('Erro ao verificar CPF existente:', error);
+        return throwError(error);
+      })
+    );
+  }
   deletarCandidato(id: number): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}DeletarCandidato/${id}`).pipe(
       catchError((error: any) => {

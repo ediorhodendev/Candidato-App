@@ -11,7 +11,7 @@
       required
       #nome="ngModel"
     ></po-input>
-    <div *ngIf="nome.invalid && nome.touched">
+    <div *ngIf="nome.invalid && (nome.dirty || nome.touched)">
       Nome é obrigatório.
     </div>
   </div>
@@ -26,8 +26,8 @@
       required
       #email="ngModel"
     ></po-input>
-    <div *ngIf="email.invalid && email.touched">
-      Email é obrigatório.
+    <div *ngIf="email.invalid && (email.dirty || email.touched)">
+      Email é obrigatório e deve ser um endereço de email válido.
     </div>
   </div>
 
@@ -42,7 +42,7 @@
       pattern="[0-9]{11}"
       #cpf="ngModel"
     ></po-input>
-    <div *ngIf="cpf.invalid && cpf.touched">
+    <div *ngIf="cpf.invalid && (cpf.dirty || cpf.touched)">
       CPF deve conter 11 dígitos numéricos.
     </div>
   </div>
@@ -60,3 +60,4 @@
     p-icon="po-icon-close"
   ></po-button>
 </form>
+
