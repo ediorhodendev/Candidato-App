@@ -7,7 +7,7 @@ import { CandidatoService } from '../candidato.service';
 import { Candidato } from 'src/candidato.model';
 
 @Component({
-  selector: 'app-cadastro-candidato-po',
+  selector: 'cadastro',
   templateUrl: './cadastro-candidato-po.component.html',
   styleUrls: ['./cadastro-candidato-po.component.css']
 })
@@ -46,12 +46,12 @@ export class CadastroCandidatoPoComponent implements OnInit {
       if (this.isNovoCandidato === true) {
         this.candidatoService.criarCandidato(this.candidato).subscribe(() => {
           this.poNotification.success('Candidato cadastrado com sucesso.');
-          this.router.navigate(['/cadastro-candidato']);
+          this.router.navigate(['/candidatos']);
         });
       } else {
         this.candidatoService.atualizarCandidato(this.candidato).subscribe(() => {
           this.poNotification.success('Candidato salvo com sucesso.');
-          this.router.navigate(['/cadastro-candidato']);
+          this.router.navigate(['/candidatos']);
         });
       }
     } else {
@@ -61,7 +61,7 @@ export class CadastroCandidatoPoComponent implements OnInit {
   }
 
   cancelar() {
-    this.router.navigate(['/cadastro-candidato']);
+    this.router.navigate(['/candidatos']);
   }
 }
 

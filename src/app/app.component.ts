@@ -11,17 +11,22 @@ import { PoMenuItem } from '@po-ui/ng-components';
 export class AppComponent {
 
   readonly menus: Array<PoMenuItem> = [
-    { label: 'Home', action: this.onClick.bind(this) },
-    { label: 'Cadastro Candidato', action: () => this.navigateToCandidatoListagem() } 
+    { label: 'Home', action: this.navigateToHome.bind(this) },
+    { label: 'Lista de Candidatos', action: () => this.navigateToCandidatoListagem() },
+    { label: 'Cadastro de Candidatos', action: () => this.navigateToCadastrodeCandidatos() }  
   ];
 
   constructor(private router: Router) {} // Injete o Router no construtor
 
-  private onClick() {
-    this.router.navigate(['/cadastro-candidato-po']);
+  private navigateToHome() {
+    this.router.navigate(['/Home']);
   }
 
   private navigateToCandidatoListagem() {
      this.router.navigate(['/candidatos']); // Navegue para a rota '/candidatos'
   }
+
+  private navigateToCadastrodeCandidatos() {
+    this.router.navigate(['/cadastro']); 
+ }
 }

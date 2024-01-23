@@ -51,14 +51,14 @@ export class CandidatoListagemComponent implements OnInit {
 
   abrirModalCriacao() {
 
-    alert("dgshgsah");
+   
     // Navegar para a tela de cadastro
-    this.router.navigate(['/cadastro-candidato-po']);
+    this.router.navigate(['/cadastro']);
   }
 
   abrirModalEdicao(candidato: Candidato) {
     // Enviar os dados do candidato para a tela de edição
-    this.router.navigate(['/cadastro-candidato-po'], { state: { candidato } });
+    this.router.navigate(['/cadastro'], { state: { candidato } });
   }
 
   salvarCandidato(candidato: Candidato) {

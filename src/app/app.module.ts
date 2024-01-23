@@ -14,6 +14,7 @@ import { PoModalModule } from '@po-ui/ng-components';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { CadastroCandidatoPoComponent } from './cadastro-candidato-po/cadastro-candidato-po.component';
+import { HomeComponent } from './home/home.component';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { CadastroCandidatoPoComponent } from './cadastro-candidato-po/cadastro-c
     AppComponent,
     CandidatoListagemComponent,
     CandidatoModalComponent,
-    CadastroCandidatoPoComponent
+    CadastroCandidatoPoComponent,
+    HomeComponent
     
   ],
   imports: [
