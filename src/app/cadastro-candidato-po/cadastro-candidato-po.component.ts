@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
 import { Router } from '@angular/router';
 import { PoNotificationService } from '@po-ui/ng-components';
 import { CandidatoService } from '../candidato.service';
@@ -15,7 +14,7 @@ export class CadastroCandidatoPoComponent implements OnInit {
   candidato = { nome: '', email: '', cpf: '' };
   form!: FormGroup;
   isNovoCandidato = true;
-  candidatos: Candidato[] = []; // Importe a lista de candidatos
+  candidatos: Candidato[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -31,7 +30,12 @@ export class CadastroCandidatoPoComponent implements OnInit {
       cpf: ['']
     });
 
-    // Recuperar os dados do candidato da rota
+    // Recupera a lista de candidatos já cadastrados
+    this.candidatoService.listarCandidatos().subscribe((candidatos) => {
+      this.candidatos = candidatos;
+    });
+
+    // Recupera os dados do candidato da rota
     const candidato: Candidato = history.state.candidato;
 
     if (candidato) {
@@ -39,6 +43,8 @@ export class CadastroCandidatoPoComponent implements OnInit {
       this.isNovoCandidato = false;
     }
   }
+
+ 
 
   salvarCandidato() {
     const cpfValido = this.validarCPF(this.candidato.cpf);
@@ -53,12 +59,18 @@ export class CadastroCandidatoPoComponent implements OnInit {
       alert('Email inválido. Deve ser um endereço de email válido.');
       return;
     }
-
+    // Verifica se o EMAIL já existe na lista de candidatos
+    if (this.emailJaCadastrado(this.candidato.email)) {
+      alert('EMAIL já cadastrado.');
+      return;
+    }
     // Verifica se o CPF já existe na lista de candidatos
-    if (this.candidatos.some(c => c.cpf === this.candidato.cpf)) {
+    if (this.cpfJaCadastrado(this.candidato.cpf)) {
       alert('CPF já cadastrado.');
       return;
     }
+
+
 
     if (this.isNovoCandidato === true) {
       this.candidatoService.criarCandidato(this.candidato).subscribe(
@@ -112,6 +124,14 @@ export class CadastroCandidatoPoComponent implements OnInit {
     return emailRegex.test(email);
   }
 
+  // Método para verificar se o CPF já existe na lista de candidatos
+  private cpfJaCadastrado(cpf: string): boolean {
+    return this.candidatos.some((c) => c.cpf === cpf);
+  }
+
+  private emailJaCadastrado(email: string): boolean {
+    return this.candidatos.some((c) => c.email === email);
+  }
   cancelar() {
     this.router.navigate(['/candidatos']);
   }
