@@ -15,6 +15,7 @@ export class CadastroCandidatoPoComponent implements OnInit {
   candidato = { nome: '', email: '', cpf: '' };
   form!: FormGroup;
   isNovoCandidato = true;
+  candidatos: Candidato[] = []; // Importe a lista de candidatos
 
   constructor(
     private formBuilder: FormBuilder,
@@ -26,34 +27,90 @@ export class CadastroCandidatoPoComponent implements OnInit {
   ngOnInit(): void {
     this.form = this.formBuilder.group({
       nome: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
-      cpf: ['', [Validators.required, Validators.pattern('\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}')]]
+      email: [''],
+      cpf: ['']
     });
 
     // Recuperar os dados do candidato da rota
     const candidato: Candidato = history.state.candidato;
 
     if (candidato) {
-      // Preencher os campos do formulário com os dados do candidato
       this.candidato = candidato;
-      this.isNovoCandidato = false; // Não é um novo candidato
+      this.isNovoCandidato = false;
     }
   }
 
   salvarCandidato() {
+    const cpfValido = this.validarCPF(this.candidato.cpf);
+    const emailValido = this.validarEmail(this.candidato.email);
+
+    if (!cpfValido) {
+      alert('CPF inválido. O formato deve ser xxxxxxxxxxx.');
+      return;
+    }
+
+    if (!emailValido) {
+      alert('Email inválido. Deve ser um endereço de email válido.');
+      return;
+    }
+
+    // Verifica se o CPF já existe na lista de candidatos
+    if (this.candidatos.some(c => c.cpf === this.candidato.cpf)) {
+      alert('CPF já cadastrado.');
+      return;
+    }
+
     if (this.isNovoCandidato === true) {
-      this.candidatoService.criarCandidato(this.candidato).subscribe(() => {
-        this.poNotification.success('Candidato cadastrado com sucesso.');
-        this.router.navigate(['/candidatos']);
-      });
+      this.candidatoService.criarCandidato(this.candidato).subscribe(
+        (response) => {
+          if (response) {
+            this.poNotification.success('Candidato cadastrado com sucesso.');
+            this.router.navigate(['/candidatos']);
+          } else {
+            alert('Erro ao cadastrar o candidato.');
+          }
+        },
+        (error) => {
+          console.error('Erro na requisição de criação:', error);
+        }
+      );
     } else {
-      this.candidatoService.atualizarCandidato(this.candidato).subscribe(() => {
-        this.poNotification.success('Candidato salvo com sucesso.');
-        this.router.navigate(['/candidatos']);
-      });
+      // O mesmo processo se aplica à atualização do candidato
     }
   }
-  
+
+  private validarCPF(cpf: string): boolean {
+    cpf = cpf.replace(/\D/g, '');
+
+    if (cpf.length !== 11) {
+      return false;
+    }
+
+    const cpfArray = cpf.split('');
+    const dv1 = parseInt(cpfArray[9]);
+    const dv2 = parseInt(cpfArray[10]);
+
+    let sum = 0;
+    for (let i = 0; i < 9; i++) {
+      sum += parseInt(cpfArray[i]) * (10 - i);
+    }
+    const remainder = 11 - (sum % 11);
+    const calculatedDV1 = remainder >= 10 ? 0 : remainder;
+
+    sum = 0;
+    for (let i = 0; i < 10; i++) {
+      sum += parseInt(cpfArray[i]) * (11 - i);
+    }
+    const remainder2 = 11 - (sum % 11);
+    const calculatedDV2 = remainder2 >= 10 ? 0 : remainder2;
+
+    return dv1 === calculatedDV1 && dv2 === calculatedDV2;
+  }
+
+  private validarEmail(email: string): boolean {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    return emailRegex.test(email);
+  }
 
   cancelar() {
     this.router.navigate(['/candidatos']);
