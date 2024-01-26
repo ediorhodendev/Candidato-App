@@ -7,7 +7,7 @@ import { catchError } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class CandidatoService {
-  private apiUrl = 'https://localhost:44379/api/Candidatos/';
+  private apiUrl = 'https://localhost:44363/api/Candidatos/';
 
   constructor(private http: HttpClient) {}
   
@@ -21,7 +21,7 @@ export class CandidatoService {
     );
   }
 
-  obterCandidatoPorId(id: number): Observable<any> {
+  obterCandidatoPorId(id: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}ObterCandidatoPorId/${id}`).pipe(
       catchError((error: any) => {
         console.error('Erro ao obter candidato por ID:', error);
@@ -31,6 +31,7 @@ export class CandidatoService {
   }
 
   criarCandidato(candidato: any): Observable<any> {
+    candidato.id='';
     return this.http.post<any>(`${this.apiUrl}CriarCandidato`, candidato).pipe(
       catchError((error: any) => {
         console.error('Erro ao criar candidato:', error);
@@ -40,13 +41,25 @@ export class CandidatoService {
   }
 
   atualizarCandidato(candidato: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}AtualizarCandidato`, candidato).pipe(
+    if (!candidato || !candidato.id) {
+      
+      const errorMessage = 'Candidato ou ID não estão definidos.';
+      console.error(errorMessage);
+      return throwError(new Error(errorMessage));
+    }
+  
+    const url = `${this.apiUrl}AtualizarCandidato/${candidato.id}`;
+  
+    return this.http.put<any>(url, candidato).pipe(
       catchError((error: any) => {
-        console.error('Erro ao atualizar candidato:', error);
+        console.error('Erro na requisição de atualização:', error);
+        alert("teste");
         return throwError(error);
       })
     );
   }
+  
+  
 
   buscarCandidatosPorNome(nome: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}BuscarCandidatosPorNome?nome=${nome}`).pipe(
@@ -64,7 +77,7 @@ export class CandidatoService {
       })
     );
   }
-  deletarCandidato(id: number): Observable<any> {
+  deletarCandidato(id: string): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}DeletarCandidato/${id}`).pipe(
       catchError((error: any) => {
         console.error('Erro ao deletar candidato:', error);

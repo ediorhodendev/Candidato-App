@@ -4,9 +4,12 @@ import { CandidatoListagemComponent } from 'src/app/candidato-listagem/candidato
 import { CadastroCandidatoPoComponent } from '../app/cadastro-candidato-po/cadastro-candidato-po.component'
 import { HomeComponent } from './home/home.component';
 const routes: Routes = [
+  
+  { path: 'Home', component: HomeComponent },
+  { path: '', redirectTo: '/home', pathMatch: 'full' }, // Redirecione a raiz para a página Home
   { path: 'candidatos', component: CandidatoListagemComponent }, 
   { path: 'cadastro', component: CadastroCandidatoPoComponent }, 
-  { path: 'Home', component: HomeComponent },
+ 
   
 ];
 

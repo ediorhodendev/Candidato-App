@@ -5,13 +5,14 @@ import { PoNotificationService } from '@po-ui/ng-components';
 import { CandidatoService } from '../candidato.service';
 import { Candidato } from 'src/candidato.model';
 
+
 @Component({
   selector: 'cadastro',
   templateUrl: './cadastro-candidato-po.component.html',
   styleUrls: ['./cadastro-candidato-po.component.css']
 })
 export class CadastroCandidatoPoComponent implements OnInit {
-  candidato = { nome: '', email: '', cpf: '' };
+  candidato = { nome: '', email: '', cpf: '', id:'' };
   form!: FormGroup;
   isNovoCandidato = true;
   candidatos: Candidato[] = [];
@@ -44,14 +45,12 @@ export class CadastroCandidatoPoComponent implements OnInit {
     }
   }
 
- 
-
   salvarCandidato() {
     const cpfValido = this.validarCPF(this.candidato.cpf);
     const emailValido = this.validarEmail(this.candidato.email);
 
     if (!cpfValido) {
-      alert('CPF inválido. O formato deve ser xxxxxxxxxxx.');
+      alert('CPF inválido. O formato deve ser xxx.xxx.xxx-xx.');
       return;
     }
 
@@ -59,18 +58,18 @@ export class CadastroCandidatoPoComponent implements OnInit {
       alert('Email inválido. Deve ser um endereço de email válido.');
       return;
     }
-    // Verifica se o EMAIL já existe na lista de candidatos
-    if (this.emailJaCadastrado(this.candidato.email)) {
-      alert('EMAIL já cadastrado.');
-      return;
-    }
-    // Verifica se o CPF já existe na lista de candidatos
-    if (this.cpfJaCadastrado(this.candidato.cpf)) {
+
+    // Verifica se o CPF já existe na lista de candidatos, apenas se for um novo candidato
+    if (this.isNovoCandidato && this.cpfJaCadastrado(this.candidato.cpf)) {
       alert('CPF já cadastrado.');
       return;
     }
 
-
+    // Verifica se o E-MAIL já existe na lista de candidatos, apenas se for um novo candidato
+    if (this.isNovoCandidato && this.emailJaCadastrado(this.candidato.email)) {
+      alert('E-MAIL já cadastrado.');
+      return;
+    }
 
     if (this.isNovoCandidato === true) {
       this.candidatoService.criarCandidato(this.candidato).subscribe(
@@ -87,36 +86,57 @@ export class CadastroCandidatoPoComponent implements OnInit {
         }
       );
     } else {
-      // O mesmo processo se aplica à atualização do candidato
+      
+      if (this.candidato.id) {
+        this.candidatoService.atualizarCandidato(this.candidato).subscribe(
+          (response) => {
+            if (response) {
+              this.poNotification.success('Candidato atualizado com sucesso.');
+              this.router.navigate(['/candidatos']);
+            } else {
+              alert(response);
+              alert('Erro ao atualizar o candidato: A resposta da API indica erro.');
+            }
+          },
+          (error) => {
+            
+            alert('Erro ao atualizar o candidato: Ocorreu um erro na requisição.');
+          }
+        );
+      } else {
+        
+        alert('ID do candidato não está definido. Certifique-se de que o objeto this.candidato contenha o ID correto antes de atualizar.');
+      }
+      
+
     }
   }
 
   private validarCPF(cpf: string): boolean {
+    // Remove caracteres não numéricos
     cpf = cpf.replace(/\D/g, '');
 
+    // Verifica se o CPF possui 11 dígitos após a remoção de não numéricos
     if (cpf.length !== 11) {
       return false;
     }
 
-    const cpfArray = cpf.split('');
-    const dv1 = parseInt(cpfArray[9]);
-    const dv2 = parseInt(cpfArray[10]);
+    // Calcula os dígitos verificadores
+    const digitos = cpf.substr(0, 9);
+    const dv1 = this.calcularDigitoVerificador(digitos, 10);
+    const dv2 = this.calcularDigitoVerificador(digitos + dv1, 11);
 
-    let sum = 0;
-    for (let i = 0; i < 9; i++) {
-      sum += parseInt(cpfArray[i]) * (10 - i);
+    // Verifica se os dígitos calculados são iguais aos dígitos fornecidos no CPF
+    return parseInt(dv1) === parseInt(cpf.charAt(9)) && parseInt(dv2) === parseInt(cpf.charAt(10));
+  }
+
+  private calcularDigitoVerificador(cpfParcial: string, peso: number): string {
+    let total = 0;
+    for (let i = 0; i < cpfParcial.length; i++) {
+      total += parseInt(cpfParcial.charAt(i)) * peso--;
     }
-    const remainder = 11 - (sum % 11);
-    const calculatedDV1 = remainder >= 10 ? 0 : remainder;
-
-    sum = 0;
-    for (let i = 0; i < 10; i++) {
-      sum += parseInt(cpfArray[i]) * (11 - i);
-    }
-    const remainder2 = 11 - (sum % 11);
-    const calculatedDV2 = remainder2 >= 10 ? 0 : remainder2;
-
-    return dv1 === calculatedDV1 && dv2 === calculatedDV2;
+    const resto = total % 11;
+    return resto < 2 ? '0' : (11 - resto).toString();
   }
 
   private validarEmail(email: string): boolean {
@@ -129,9 +149,11 @@ export class CadastroCandidatoPoComponent implements OnInit {
     return this.candidatos.some((c) => c.cpf === cpf);
   }
 
+  // Método para verificar se o E-MAIL já existe na lista de candidatos
   private emailJaCadastrado(email: string): boolean {
     return this.candidatos.some((c) => c.email === email);
   }
+
   cancelar() {
     this.router.navigate(['/candidatos']);
   }

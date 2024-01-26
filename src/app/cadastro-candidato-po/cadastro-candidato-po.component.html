@@ -22,13 +22,14 @@
   </div>
 
   <div class="form-group">
-    <label for="cpf">CPF:("CPF sem ponto e traço (xxxxxxxxxxx)")</label>
+    <label for="cpf">CPF:</label>
     <po-input
       type="text"
       id="cpf"
       name="cpf"
       [(ngModel)]="candidato.cpf"
-      p-hint="CPF sem ponto e traço (xxxxxxxxxxx)"
+      appCpfMask
+      placeholder="Digite o CPF (xxx.xxx.xxx-xx)"
     ></po-input>
   </div>
 

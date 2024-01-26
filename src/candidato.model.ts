@@ -1,7 +1,9 @@
 export interface Candidato {
-    id: number;
+    id: string;
     nome: string;
     email: string;
     cpf: string;
   }
+
+  
   

@@ -15,6 +15,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { CadastroCandidatoPoComponent } from './cadastro-candidato-po/cadastro-candidato-po.component';
 import { HomeComponent } from './home/home.component';
+import { CpfMaskDirective } from '../app/directives/cpf-mask.directive';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { HomeComponent } from './home/home.component';
     CandidatoListagemComponent,
     
     CadastroCandidatoPoComponent,
-    HomeComponent
+    HomeComponent,
+    CpfMaskDirective
     
   ],
   imports: [

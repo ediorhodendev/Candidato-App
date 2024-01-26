@@ -48,7 +48,6 @@ export class CandidatoListagemComponent implements OnInit {
   }
 
 
-
   abrirModalCriacao() {
 
    
@@ -100,4 +99,5 @@ export class CandidatoListagemComponent implements OnInit {
       });
     }
   }
+  
 }
